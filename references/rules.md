@@ -70,3 +70,8 @@ The kit ships `IEEEbib.bst`. Two behaviours matter:
   declared, not where it is placed, so printed first-appearance order can be
   non-monotonic (2 of 7 accepted ICASSP 2026 papers have exactly one such
   inversion). Do not fight it with `\nocite` ordering.
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)

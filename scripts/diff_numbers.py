@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 """List every number that disappeared from, or appeared in, a paper between two PDFs.
 
 This is the last gate after any edit: compare the body pages of the previous

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 """Find paragraphs and captions whose last line holds only one or two words.
 
 A one-word last line ("runt") wastes a whole line in a page-limited paper and

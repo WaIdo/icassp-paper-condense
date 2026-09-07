@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 """Measure a directory of accepted papers from the target venue.
 
 Most typesetting arguments end with "what do accepted papers actually do?"

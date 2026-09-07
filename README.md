@@ -90,4 +90,16 @@ ICASSP 2026 and should be re-measured for other venues with
 
 ## License
 
-MIT.
+MIT — see [`LICENSE`](LICENSE). Copyright (c) 2026 WaIdo (github.com/WaIdo).
+
+Every script carries an `SPDX-License-Identifier: MIT` header and every
+reference file a one-line footer, so an individual file copied out of the skill
+still carries its origin and terms. Please keep them.
+
+Not covered by this licence: the ICASSP paper kit and `spconf.sty`, which are
+IEEE/ICASSP's; and any papers you measure with `corpus_baseline.py`. The venue
+numbers in `references/measurements.md` are measurements of published papers —
+factual observations about page geometry, font sizes and punctuation counts.
+
+If you use this in published work, a link to the repository is appreciated but
+not required.

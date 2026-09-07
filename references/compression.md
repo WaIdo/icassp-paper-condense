@@ -116,3 +116,8 @@ Measure first (`corpus_baseline.py` prints densities). Then:
 A second affiliation line costs one body line *in each column* of page 1 and
 ripples to the end. See `author-block.md` for the recipe that adds an
 affiliation at zero body cost.
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)

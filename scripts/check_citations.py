@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 """Audit citations and the bibliography of a LaTeX paper.
 
 Citation errors are the ones that never raise a warning: BibTeX silently

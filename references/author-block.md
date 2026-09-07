@@ -65,3 +65,8 @@ are normal — every paper with numbered affiliations has them).
 
 The author list on the ICASSP submission form must match the PDF (kit rule).
 ORCiDs are validated in the ORCiD portal, not printed in the paper.
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)

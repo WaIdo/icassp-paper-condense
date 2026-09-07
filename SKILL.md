@@ -193,3 +193,22 @@ worked reasoning behind the rules above.
 | `references/author-block.md` | adding an author or a second affiliation without spending a body line |
 | `references/fact-check.md` | before touching any sentence's meaning; over-correction; which sentences actually break |
 | `references/pitfalls.md` | silent failures: BibTeX skipping entries, `&&` masking exit codes, appending to the wrong file, float numbering, "not reported/used" symbols |
+
+## License and attribution
+
+MIT — see `LICENSE`. Copyright (c) 2026 WaIdo (github.com/WaIdo).
+Source: https://github.com/WaIdo/icassp-paper-condense
+
+You may use, modify and redistribute this skill, including inside a paid or
+closed product, provided the copyright notice and the licence text travel with
+it. That matters here because agents copy single files out of skills: each
+script carries an SPDX header and each reference file a one-line footer, so a
+file that ends up somewhere else still says where it came from. Keep them when
+you edit.
+
+Two things this skill does **not** license, because they are not its to give:
+the ICASSP paper kit and `spconf.sty` (IEEE/ICASSP's own terms), and the papers
+you point `corpus_baseline.py` at. The venue figures quoted in
+`references/measurements.md` are measurements of published work — facts about
+page geometry and font sizes, not reproductions of it.
+

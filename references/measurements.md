@@ -91,3 +91,8 @@ license** attached with the open access data." Both premises must be true of
 ethics approval, and a dataset obtained under a signed agreement is not open
 access. Write what the authors did (retrospective study on released benchmarks,
 no new footage, no recruited subjects) rather than what a licence "confirms".
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)

@@ -74,3 +74,8 @@ caps), the aggregation rule must distinguish *checked-and-clean* from
 *never-adjudicated*. A rule like "keep if ≥2 of 3 verifiers object" silently
 classifies a claim whose three verifiers all died as "cleared". Report the
 un-adjudicated count explicitly; the surviving list is a lower bound.
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)

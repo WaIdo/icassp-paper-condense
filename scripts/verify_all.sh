@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 # Rebuild the paper and run every check that must pass after an edit.
 #
 #   verify_all.sh main.tex [--backup previous.pdf] [--target-pages 5] [--body-pages 4]

@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 WaIdo (github.com/WaIdo)
+# Part of the icassp-paper-condense skill: https://github.com/WaIdo/icassp-paper-condense
 """One-shot layout report for a two-column conference PDF (ICASSP / spconf).
 
 Reports the things that decide whether a page-limited paper is actually

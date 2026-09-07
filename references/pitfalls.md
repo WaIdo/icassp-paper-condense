@@ -103,3 +103,8 @@ timed out is silently cleared. Track *un-adjudicated* separately from
 
 **Over-correction runs one way.** All three reverted edits in one audit had
 weakened the authors' own claims. See `fact-check.md`.
+
+---
+
+<!-- SPDX-License-Identifier: MIT -->
+Part of [icassp-paper-condense](https://github.com/WaIdo/icassp-paper-condense) · MIT © 2026 WaIdo (github.com/WaIdo)
