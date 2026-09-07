@@ -1,0 +1,3 @@
+display_name: ICASSP Paper Condense
+short_description: Condense, typeset and fact-check a LaTeX paper to ICASSP's 4+1 page limit; figures and tables first, body text after the author confirms; every edit verified by measurement.
+default_prompt: Use icassp-paper-condense to bring this paper within ICASSP's 4-page-plus-references limit. Start with Phase 0 (measure only, write the gap ledger, stop). Never delete figure or table content, never over-correct a claim, and run scripts/verify_all.sh after every edit.
