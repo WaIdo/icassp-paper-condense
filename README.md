@@ -1,5 +1,7 @@
 # icassp-paper-condense
 
+**English** · [简体中文](README.zh-CN.md)
+
 An agent skill for condensing, typesetting and fact-checking a LaTeX paper to
 **ICASSP's 4 + 1 page limit** (spconf template) — without deleting figure or
 table content, and with every edit verified by measurement rather than by eye.
@@ -8,9 +10,6 @@ Works with **Claude Code** and **OpenAI Codex** (both read the same
 `SKILL.md` format). The measured venue facts come from seven accepted
 ICASSP 2026 papers; the process and the pitfalls come from doing this on a
 real submission, including the mistakes.
-
-一个把论文压进 ICASSP「4 页正文 + 第 5 页仅参考文献」的 agent skill：
-不删图表内容、每改必量、先图表后正文、改完逐项验证。Claude Code 与 Codex 通用。
 
 ## What it does
 
