@@ -32,7 +32,7 @@ propose to the author instead.
 | booktabs rule seps (`\tightrules`) | 2–4 mm per short table | `\arraystretch` is usually already at the floor — measure before touching it |
 | Caption `\vskip` 10 pt → 3 pt (override `\@makecaption`) | ~1 line per float | matches corpus caption spacing |
 | Float separations `\floatsep`/`\textfloatsep` 6/5 pt | small | keep ≥ 5 pt |
-| Section skips reduced | ~1 line per 3 headings | do not go below the corpus's visible heading spacing |
+| Section/subsection skips (`\@startsection`) | ~13 pt (4.6 mm) of white per heading; 14 headings = 64 mm ≈ 17 lines of column space, and one page on the paper measured | buys **white, not lines** — the text-line count was 1002 before and after; the corpus floor is 10.5 pt above / 4.3 pt below and going under it is a decision to report, not a default. See the worked case below |
 | Display-equation skips (`\abovedisplayskip` etc. 4/4/2/2 pt) | stock→4 pt saves 4.4 mm over five equations; 4→3 pt 3.2 mm; 3→2 pt 7.4 mm; →0 pt 14.8 mm | at 4 pt the white between text ink and equation ink is 1.42 pt against 1.24 – 1.95 pt in accepted papers — **already level; do not go tighter** |
 | `\parskip 0pt plus 1.5pt` | absorbs `\flushbottom` stretch quietly | — |
 | Group several floats into one column (declare at one insertion point) | frees the column they used to split | re-measure every column bottom after moving a float |
@@ -43,6 +43,58 @@ propose to the author instead.
 Do **not**: change `\textwidth`/margins, drop below 9 pt in captions or body,
 trim `\vskip 2em` above the title (every accepted paper keeps it), delete
 figure/table content, or delete or reword any of the author's text.
+
+## Section-heading spacing (worked case)
+
+`spconf.sty` redefines only the heading *face*, so the skips are `article`'s,
+sized for a 10 pt one-column class and generous in a 9 pt two-column one. They
+are set with `\@startsection`; the first brace group is the skip *before* the
+heading (negative = suppress the following paragraph indent), the second the
+skip *after*:
+
+```latex
+\makeatletter
+% spconf's \@sect still sets the face; this changes only the skips.
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-1.8ex \@plus -.3ex \@minus -.2ex}{1.0ex \@plus .1ex}{\normalfont\normalsize\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.6ex \@plus -.3ex \@minus -.2ex}{0.6ex \@plus .1ex}{\normalfont\normalsize\bfseries}}
+\makeatother
+```
+
+Measured on one 5-page paper with 14 headings, stock skips versus the above:
+
+| | pages | body text lines | extra white above / below a heading |
+|---|---|---|---|
+| stock (`-3.5ex/2.3ex`, `-3.25ex/1.5ex`) | **6** | 1002 | 15.12 / 8.20 pt |
+| corpus floor (`-2.5ex/1.3ex`, `-2.3ex/0.9ex`) | **6** | 1002 | 11.04 / 5.34 pt |
+| shipped (`-1.8ex/1.0ex`, `-1.6ex/0.6ex`) | **5** | 1002 | 7.21 / 3.06 pt |
+
+Read the middle column before the first: **the line count never moves.** This
+lever does not shorten the text, it removes vertical white — 13 pt per heading,
+64 mm over fourteen of them, which on that paper was the difference between six
+pages and five. That also means it cannot fix a runt or a half-empty last page;
+it only relocates where the column breaks fall.
+
+How to use it:
+
+1. Measure first (`measure_layout.py` prints `heading spacing`, and
+   `corpus_baseline.py` the venue's `head_ab_pt` / `head_be_pt`). The stock
+   template already sits *inside* the accepted band, so you are not correcting
+   anything — you are spending appearance for a page.
+2. Move in steps of ~0.3ex and rebuild each time. The step that matters is
+   usually the last one: on that paper, `-2.0ex/1.05ex` was still six pages and
+   `-1.8ex/1.0ex` was five, so ~0.2ex per heading was the whole margin.
+   Bisect; do not jump straight to a tiny value and assume it was needed.
+3. If the result lands below the corpus floor (10.5 pt above, 4.3 pt below),
+   `measure_layout.py` flags it. Do not silently accept the flag: state in the
+   report how many pages the tightening buys. If the answer is "none" or "it
+   would also fit one step looser", back it off.
+4. Do **not** tighten `\subsubsection` to zero or set the after-skip to `0ex` —
+   the heading then touches its first line and the level structure stops being
+   readable. 0.6ex was the floor that still read correctly at 9 pt.
+5. This is a preamble change and touches no text, so it is a Phase B lever you
+   may apply — unlike anything that would reword a heading.
 
 ## `\flushbottom` and why freed lines have to have a destination
 

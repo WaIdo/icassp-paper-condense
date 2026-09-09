@@ -45,6 +45,70 @@ def lines_of(page):
     return out
 
 
+HEAD_RE = re.compile(r"^\s*\d+(\.\d+)*\.?\s+\S")
+
+
+def heading_gaps(doc):
+    """Extra white above/below numbered section headings, in pt.
+
+    Reported *net of the paper's own in-paragraph line gap*, so a 9 pt and a
+    10 pt paper are comparable.  Returns (n, median_above, median_below,
+    per-heading rows) or (0, None, None, []) when no heading is recognised.
+    """
+    cols = []
+    for page in doc:
+        w = page.rect.width
+        left, right = [], []
+        for b in page.get_text("dict")["blocks"]:
+            if b.get("type", 0) != 0:
+                continue
+            for ln in b["lines"]:
+                t = "".join(s["text"] for s in ln["spans"]).strip()
+                if not t:
+                    continue
+                x0, y0, x1, y1 = ln["bbox"]
+                sp = max(ln["spans"], key=lambda s: len(s["text"]))
+                (left if (x0 + x1) / 2 < w / 2 else right).append(
+                    dict(y0=y0, y1=y1, t=t, size=sp["size"], font=sp["font"], blk=b["number"]))
+        for c in (left, right):
+            c.sort(key=lambda r: r["y0"])
+            if c:
+                cols.append(c)
+    if not cols:
+        return 0, None, None, []
+    hist = {}
+    for c in cols:
+        for r in c:
+            hist[round(r["size"] * 2) / 2] = hist.get(round(r["size"] * 2) / 2, 0) + len(r["t"])
+    body = max(hist, key=hist.get)
+    gaps = [b["y0"] - a["y1"] for c in cols for a, b in zip(c, c[1:])
+            if a["blk"] == b["blk"] and abs(a["size"] - body) < .3
+            and abs(b["size"] - body) < .3 and 0 <= b["y0"] - a["y1"] < 8]
+    if not gaps:
+        return 0, None, None, []
+    lg = st.median(gaps)
+    rows = []
+    for c in cols:
+        for i in range(1, len(c) - 1):
+            r = c[i]
+            if not HEAD_RE.match(r["t"]) or len(r["t"]) > 60:
+                continue
+            if not any(k in r["font"] for k in ("Medi", "Bold", "-B")):
+                continue
+            if not any(k in r["font"] for k in ("Rom", "Times", "Nimbus", "TeX", "Termes")):
+                continue
+            if abs(r["size"] - body) > 1.5:
+                continue
+            ab, be = r["y0"] - c[i - 1]["y1"], c[i + 1]["y0"] - r["y1"]
+            if not (0 <= ab < 45 and 0 <= be < 45):
+                continue
+            rows.append((r["t"][:40], round(ab - lg, 2), round(be - lg, 2)))
+    if not rows:
+        return 0, None, None, []
+    return (len(rows), round(st.median([x[1] for x in rows]), 2),
+            round(st.median([x[2] for x in rows]), 2), rows)
+
+
 def measure(pdf):
     d = fitz.open(pdf)
     mid = d[0].rect.width * MM / 2
@@ -117,6 +181,8 @@ def measure(pdf):
             if n not in order:
                 order.append(n)
     r["ref_inv"] = sum(1 for i in range(len(order) - 1) if order[i + 1] < order[i])
+    n, ab, be = heading_gaps(d)[:3]
+    r["head_ab_pt"], r["head_be_pt"] = ab, be
     return r
 
 
@@ -131,7 +197,7 @@ def main():
     rows = [measure(p) for p in pdfs]
     extra = [measure(p) for p in a.also]
     cols = ["pages", "title_y", "tb_lines", "tb_sizes", "abs_lines", "abs_mm", "last_gap_mm", "ref_gap_mm",
-            "min_size", "semi_per_k", "colon_per_k", "float_inv", "ref_inv"]
+            "head_ab_pt", "head_be_pt", "min_size", "semi_per_k", "colon_per_k", "float_inv", "ref_inv"]
     hdr = f"{'file':24s} " + " ".join(f"{c:>11s}" for c in cols)
     print(hdr)
     for r in rows + extra:
@@ -145,6 +211,7 @@ def main():
         print(f"{lab:24s} " + " ".join(vals))
     print("\ncolumns: title_y = first title line y (mm); tb_lines = lines in the title block; abs_mm = abstract ink height;"
           "\nlast_gap_mm = last page right-column gap to text block; ref_gap_mm = median gap before each [n] entry;"
+          "\nhead_ab_pt / head_be_pt = median extra white above / below a numbered section heading, net of that paper's own line gap;"
           "\nsemi/colon_per_k = per 1000 body words; *_inv = first-citation order inversions (figures+tables / references).")
 
 

@@ -24,6 +24,7 @@ Usage:
 
 Requires: PyMuPDF (pip install pymupdf) and poppler's pdfinfo on PATH.
 """
+import statistics as st
 import argparse, collections, json, os, re, subprocess, sys
 
 try:
@@ -32,6 +33,70 @@ except ImportError:
     sys.exit("PyMuPDF missing: pip install pymupdf")
 
 MM = 25.4 / 72.0
+
+
+HEAD_RE = re.compile(r"^\s*\d+(\.\d+)*\.?\s+\S")
+
+
+def heading_gaps(doc):
+    """Extra white above/below numbered section headings, in pt.
+
+    Reported *net of the paper's own in-paragraph line gap*, so a 9 pt and a
+    10 pt paper are comparable.  Returns (n, median_above, median_below,
+    per-heading rows) or (0, None, None, []) when no heading is recognised.
+    """
+    cols = []
+    for page in doc:
+        w = page.rect.width
+        left, right = [], []
+        for b in page.get_text("dict")["blocks"]:
+            if b.get("type", 0) != 0:
+                continue
+            for ln in b["lines"]:
+                t = "".join(s["text"] for s in ln["spans"]).strip()
+                if not t:
+                    continue
+                x0, y0, x1, y1 = ln["bbox"]
+                sp = max(ln["spans"], key=lambda s: len(s["text"]))
+                (left if (x0 + x1) / 2 < w / 2 else right).append(
+                    dict(y0=y0, y1=y1, t=t, size=sp["size"], font=sp["font"], blk=b["number"]))
+        for c in (left, right):
+            c.sort(key=lambda r: r["y0"])
+            if c:
+                cols.append(c)
+    if not cols:
+        return 0, None, None, []
+    hist = {}
+    for c in cols:
+        for r in c:
+            hist[round(r["size"] * 2) / 2] = hist.get(round(r["size"] * 2) / 2, 0) + len(r["t"])
+    body = max(hist, key=hist.get)
+    gaps = [b["y0"] - a["y1"] for c in cols for a, b in zip(c, c[1:])
+            if a["blk"] == b["blk"] and abs(a["size"] - body) < .3
+            and abs(b["size"] - body) < .3 and 0 <= b["y0"] - a["y1"] < 8]
+    if not gaps:
+        return 0, None, None, []
+    lg = st.median(gaps)
+    rows = []
+    for c in cols:
+        for i in range(1, len(c) - 1):
+            r = c[i]
+            if not HEAD_RE.match(r["t"]) or len(r["t"]) > 60:
+                continue
+            if not any(k in r["font"] for k in ("Medi", "Bold", "-B")):
+                continue
+            if not any(k in r["font"] for k in ("Rom", "Times", "Nimbus", "TeX", "Termes")):
+                continue
+            if abs(r["size"] - body) > 1.5:
+                continue
+            ab, be = r["y0"] - c[i - 1]["y1"], c[i + 1]["y0"] - r["y1"]
+            if not (0 <= ab < 45 and 0 <= be < 45):
+                continue
+            rows.append((r["t"][:40], round(ab - lg, 2), round(be - lg, 2)))
+    if not rows:
+        return 0, None, None, []
+    return (len(rows), round(st.median([x[1] for x in rows]), 2),
+            round(st.median([x[2] for x in rows]), 2), rows)
 
 
 def lines_of(page):
@@ -109,6 +174,11 @@ def main():
                 if l["y0"] > ref_bottom + 1.5 and re.fullmatch(r"\s*\d{1,3}\s*", l["text"]):
                     pn.append(dict(page=pi + 1, text=l["text"].strip()))
     R["page_numbers_found"] = pn
+
+    # ---- section-heading spacing ----------------------------------------
+    hn, hab, hbe, hrows = heading_gaps(doc)
+    R["heading_spacing"] = dict(count=hn, extra_above_pt=hab, extra_below_pt=hbe,
+                                headings=[dict(text=t, above_pt=a2, below_pt=b2) for t, a2, b2 in hrows])
 
     # ---- references ------------------------------------------------------
     texts = [p.get_text() for p in doc]
@@ -239,6 +309,15 @@ def main():
         print(f"    title block: {tb['lines']} lines, first line at y={tb['first_line_y_mm']} mm "
               f"(accepted ICASSP 2026 papers: 33.1-34.1), widths {tb['widths_mm']}, sizes {tb['sizes_pt']}")
     print(f"{ok(not pn)}page numbers found: {pn if pn else 'none'}")
+    hs = R["heading_spacing"]
+    if hs["count"]:
+        lo = hs["extra_above_pt"] >= 10.5 and hs["extra_below_pt"] >= 4.3
+        print(f"{ok(lo)}heading spacing: {hs['count']} headings, extra white above "
+              f"{hs['extra_above_pt']} pt, below {hs['extra_below_pt']} pt "
+              f"(accepted ICASSP 2026: above 10.5-17.5, below 4.3-9.4)")
+        if not lo:
+            print("    tighter than every paper in the corpus -- justify it by the "
+                  "page it buys, and report it to the author")
     fs = R["font_sizes"]
     print(f"    font sizes (spans >5 chars): {fs['histogram']}")
     if fs["below_min"]:

@@ -52,6 +52,12 @@ considered the final word."
   set in `{\large \lineskip .5em ...}`. `\name{}` is one row; each `\\` in
   `\address{}` is a new row (and a new tabular cell, so font commands do not
   carry across rows).
+- **`spconf.sty` never touches `\section`'s spacing.** It redefines `\@sect`,
+  which sets the *face* (bold, section titles in capitals) — the before/after
+  skips are still `article`'s, sized for a 10 pt one-column class: section
+  `{-3.5ex plus -1ex minus -.2ex}{2.3ex plus .2ex}`, subsection
+  `{-3.25ex ...}{1.5ex plus .2ex}`. That is why heading spacing is a real lever
+  here and not in a class that already tuned it (see `compression.md`).
 - `\thebibliography` is a `\list` with default `\itemsep`; you can redefine it
   after loading the style to tune reference spacing (see `compression.md`).
 - Two-affiliation support exists as `\twoauthors{...}{...}{...}{...}`, which

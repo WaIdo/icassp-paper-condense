@@ -151,21 +151,32 @@ and keep it only if it actually bought lines.
 4. **Float placement.** Moving a float's declaration changes where text flows
    around it and can remove a runt several paragraphs away. Re-measure every
    column bottom afterwards.
-5. **Fill the last page.** Measure the corpus's last-column gap first (accepted
+5. **Section-heading skips.** `spconf.sty` sets only the heading *face*, so the
+   skips are `article`'s, sized for a 10 pt one-column class. Tightening them
+   with `\@startsection` reclaims ~13 pt of white per heading -- 64 mm over
+   fourteen headings, a page on the paper measured -- and changes no word. It
+   buys **white, not lines**: the text-line count was identical before and
+   after, so it cannot fix a runt. Move in ~0.3ex steps, rebuild each time, and
+   stop at the first setting that fits; the stock template already sits inside
+   the accepted corpus band, so every step below it is appearance spent for a
+   page, and `measure_layout.py` flags a paper that goes under the corpus floor
+   (10.5 pt above / 4.3 pt below). Recipe and the measured table:
+   `references/compression.md`.
+6. **Fill the last page.** Measure the corpus's last-column gap first (accepted
    ICASSP 2026 papers: 0.1–9.0 mm). The lever is the bibliography `\itemsep`,
    tuned by bisection with a full rebuild each step. Do not expand `et al.`
    author lists to fill space -- IEEE style requires et al. past six authors, so
    expanding is a violation, not a trick.
-6. **What you may not do here:** delete a sentence, delete "redundant" words,
+7. **What you may not do here:** delete a sentence, delete "redundant" words,
    merge two paragraphs, shorten a caption's prose, or reword for density.
    Those are text edits. If `find_runts.py` still reports runts, or the gap is
    still open, put them in the report as *proposals* -- quote the paragraph,
    name the two or three words you would cut, say how many lines it buys -- and
    stop. The author decides.
-7. **Fact-check what the layout moved**, using `references/fact-check.md`. A
+8. **Fact-check what the layout moved**, using `references/fact-check.md`. A
    factual error you find is also reported, not silently rewritten: quote the
    sentence, give the evidence, propose the wording, let the author approve it.
-8. `verify_all.sh --backup <phase-A pdf>`. Since no word changed,
+9. `verify_all.sh --backup <phase-A pdf>`. Since no word changed,
    `diff_numbers.py` must report **zero** lost and zero gained numbers. Any
    difference means you edited text without meaning to.
 

@@ -38,6 +38,35 @@ Measure the abstract as ink height *between* the ABSTRACT heading and the Index
 Terms line, not from heading to heading — including the inter-block gap adds
 ~2.4 mm and produces a false "over the limit".
 
+## Section headings
+
+Measured by `corpus_baseline.py` (`head_ab_pt` / `head_be_pt`) as the white
+*above* and *below* a numbered heading, **net of that paper's own
+in-paragraph line gap** — so a 9 pt and a 10 pt paper are directly comparable.
+
+| paper | extra above (pt) | extra below (pt) |
+|---|---|---|
+| 2604.17062v1 | 10.59 | 4.29 |
+| 2603.01640v2 | 10.49 | 6.56 |
+| 2603.27533v1 | 12.26 | 6.13 |
+| 2603.29291v1 | 12.76 | 7.41 |
+| 2603.19757v1 | 13.69 | 7.62 |
+| 2604.03002v1 | 16.88 | 7.65 |
+| 2606.11783v1 | 17.46 | 9.37 |
+| **corpus range** | **10.5 – 17.5** | **4.3 – 9.4** |
+| stock `article` skips (`-3.5ex/2.3ex`, `-3.25ex/1.5ex`) | 15.12 | 8.20 |
+
+Two things follow. First, **the untouched template already sits inside the
+accepted band** — nobody has to tighten headings to look normal, so any
+tightening is a page-buying decision, not a correction. Second, the band is
+wide: the loosest accepted paper leaves 1.7× the white of the tightest, which
+means a few pt of tightening is invisible at this venue.
+
+The one paper measured with reduced skips (`-1.8ex/1.0ex`, `-1.6ex/0.6ex`)
+came out at 7.21 above / 3.06 below — below the corpus floor on both. It is
+flagged by `measure_layout.py` for exactly that reason. It stayed because the
+page it buys was load-bearing; see the worked case in `compression.md`.
+
 ## Tables
 
 | quantity | accepted papers | consequence |
