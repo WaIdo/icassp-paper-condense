@@ -23,7 +23,7 @@ problem, and as the target when deciding how far to go.
 |---|---|---|
 | First title line y | 33.1 – 34.1 mm (official template 34.1) | **nobody trims `\vskip 2em`; do not be the one paper that does** |
 | Lines in the block (title + authors + affiliations + emails) | 4 / 4 / 4 / 5 / 6 / 7 / 8 / 9 | line count is not the constraint |
-| Font sizes in the block | 12 pt names everywhere; affiliation lines at 12, 9 or 8 pt | one accepted paper sets names 12 pt / affiliation 8 pt on one line; setting affiliation and e-mail rows at 9 pt is conservative and buys a whole line (see `author-block.md`) |
+| Font sizes in the block | **12 pt on every line, in all seven papers.** The only sub-12 pt spans above the abstract are a superscript affiliation marker (`1,*`, 8 pt) in one paper and a teaser figure's panel labels in another | there is **no accepted-paper precedent for a 9 pt affiliation row**. Dropping to 9 pt is a deviation — justified only when 12 pt does not fit the 178 mm block, which is what happens with two affiliations on one row (see `author-block.md`) |
 | E-mail line | the one paper that prints e-mails uses the normal face, 97.8 mm | `\texttt` at 12 pt ran 158.6 mm in one case; monospace is the outlier |
 
 ## Abstract

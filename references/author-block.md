@@ -15,7 +15,7 @@ statement. So the extra row has to be paid for inside the title block itself.
 |---|---|---|
 | `\vskip 2em` above the title | every accepted paper starts its title at 33.1 – 34.1 mm; the official template at 34.1 | **do not touch** — trimming it makes yours the only deviating paper |
 | Title-block line count | accepted papers run 4 – 9 lines | not the constraint |
-| Font size of the affiliation/e-mail rows | accepted papers set names at 12 pt and affiliations at 12, 9 **or 8** pt; one sets names 12 / affiliation 8 on a single line | **this is the lever** — 9 pt stays on the kit's floor (8 pt is below it) |
+| Font size of the affiliation/e-mail rows | all seven accepted papers set the whole block at 12 pt; none drops the affiliation row | **this is the lever, and it is a deviation** — take it only when 12 pt does not fit. Measured on a two-college row: at 12 pt the line ran 195.5 mm against a 178 mm block (1 Overfull, text outside the block); at 9 pt it fits at 160.6 mm. Splitting it into two 12 pt rows is compliant but cost a whole page. 9 pt is the kit's floor — 8 pt is below it and not an option |
 | `\texttt` e-mails | the one accepted paper printing e-mails uses the normal face at 97.8 mm; monospace at 12 pt ran 158.6 mm | drop `\texttt` |
 | Institution and e-mail on one line | — | authors rejected this as improper; keep them on separate rows |
 
