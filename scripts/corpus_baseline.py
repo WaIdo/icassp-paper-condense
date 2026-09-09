@@ -158,11 +158,26 @@ def measure(pdf):
                 if len(s["text"].strip()) > 3:
                     sizes[round(s["size"], 1)] += 1
         texts.append(p.get_text())
-    body = "".join(texts[:-1]) if len(texts) > 1 else texts[0]
-    body = re.sub(r"\[\d+[^\]]*\]", "", body)
+    # Two ledgers.  Caption prose legitimately carries key-style separators
+    # ("l: manual labels; +: external model"), so mixing it into the body
+    # count inflates the density and produces a false alarm -- measured on one
+    # paper, 6.80 mixed against 0.76 in the body alone.  Captions are the text
+    # blocks whose first line opens with "Fig."/"Table".
+    cap_chunks, body_chunks = [], []
+    for pi in range(max(1, len(d) - 1)):
+        for b in d[pi].get_text("dict")["blocks"]:
+            if b.get("type", 0) != 0:
+                continue
+            t = "".join("".join(sp["text"] for sp in ln["spans"]) for ln in b["lines"])
+            (cap_chunks if re.match(r"\s*(Fig|Figure|Table)\s*\.?\s*\d", t)
+             else body_chunks).append(t)
+    strip = lambda x: re.sub(r"\[\d+[^\]]*\]", "", x)
+    body, caps = strip("".join(body_chunks)), strip("".join(cap_chunks))
     body_words = len(re.findall(r"[A-Za-z][A-Za-z-]+", body)) or 1
+    cap_words = len(re.findall(r"[A-Za-z][A-Za-z-]+", caps)) or 1
     r["semi_per_k"] = round(1000 * body.count(";") / body_words, 2)
     r["colon_per_k"] = round(1000 * body.count(":") / body_words, 2)
+    r["cap_semi_per_k"] = round(1000 * caps.count(";") / cap_words, 2)
     r["min_size"] = min(sizes) if sizes else None
     r["sizes_lt9"] = sorted(k for k in sizes if k < 8.9)[:4]
     # float citation order
@@ -197,7 +212,7 @@ def main():
     rows = [measure(p) for p in pdfs]
     extra = [measure(p) for p in a.also]
     cols = ["pages", "title_y", "tb_lines", "tb_sizes", "abs_lines", "abs_mm", "last_gap_mm", "ref_gap_mm",
-            "head_ab_pt", "head_be_pt", "min_size", "semi_per_k", "colon_per_k", "float_inv", "ref_inv"]
+            "head_ab_pt", "head_be_pt", "min_size", "semi_per_k", "colon_per_k", "cap_semi_per_k", "float_inv", "ref_inv"]
     hdr = f"{'file':24s} " + " ".join(f"{c:>11s}" for c in cols)
     print(hdr)
     for r in rows + extra:
@@ -212,7 +227,7 @@ def main():
     print("\ncolumns: title_y = first title line y (mm); tb_lines = lines in the title block; abs_mm = abstract ink height;"
           "\nlast_gap_mm = last page right-column gap to text block; ref_gap_mm = median gap before each [n] entry;"
           "\nhead_ab_pt / head_be_pt = median extra white above / below a numbered section heading, net of that paper's own line gap;"
-          "\nsemi/colon_per_k = per 1000 body words; *_inv = first-citation order inversions (figures+tables / references).")
+          "\nsemi/colon_per_k = per 1000 words of BODY prose only; cap_semi_per_k = the caption ledger, where key-style separators are normal and not a tell; *_inv = first-citation order inversions (figures+tables / references).")
 
 
 if __name__ == "__main__":

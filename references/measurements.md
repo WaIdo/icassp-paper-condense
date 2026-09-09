@@ -107,13 +107,16 @@ which is why it is worth knowing that both forms get accepted.
 
 | mark | accepted papers | notes |
 |---|---|---|
-| `;` | median 1.15, max 4.77 (body prose only: median 1.04, max 5.01) | the "AI feel" signal is `independent clause; independent clause` in body prose; caption keys (`ℓ: labels; †: external`) are separate and normal |
+| `;` **body prose** | 0.00 / 0.00 / 0.86 / 0.91 / 2.00 / 2.86 / 5.20 | this is the ledger that matters: the "AI feel" signal is `independent clause; independent clause` in body prose |
+| `;` **captions** | 0.00 / 0.00 / 0.00 / 2.62 / 3.70 / 6.37 / 15.79 | key-style separators (`ℓ: labels; †: external`) are a compression device, not a tell — a paper with an eight-panel figure and four symbol-keyed tables measured 55.6 here while its body sat at 0.85 |
 | `:` | median 8.55, max 15.28 | usually already in range |
 | `—` | median 1.55, max 3.83 | usually already in range |
 
-Measure the two ledgers separately: a paper with an eight-panel figure and four
-symbol-keyed tables can sit at 50/1000 in captions while its body prose is at
-3/1000 — the second number is the one that matters.
+`corpus_baseline.py` splits the two ledgers for you (`semi_per_k` is body-only,
+`cap_semi_per_k` the captions). It did not always: while it counted one mixed
+number, a paper whose body prose sat at 0.85 reported **6.80** — above every
+paper in the corpus — purely from its caption keys. Any single whole-document
+punctuation count has this failure mode; split before you conclude anything.
 
 ## Italics
 
