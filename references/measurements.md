@@ -72,7 +72,7 @@ page it buys was load-bearing; see the worked case in `compression.md`.
 | quantity | accepted papers | consequence |
 |---|---|---|
 | Caption size | 8.9 – 9.0 pt (i.e. the kit's 9 pt) | keep captions at `\small`/9 pt |
-| Table-body size | 5.42 / 6.61 / 6.81 / 6.94 pt in the MSP-ReID paper; 0.61 – 0.77 of caption size across the corpus | `\scriptsize` (7 pt) for the tabular is above venue practice, so it is safe |
+| Table-body size | one paper (2603.01640v2) sets its four tables at 5.42 / 6.61 / 6.81 / 6.94 pt with 8.93 pt captions; ratios to caption size across all 7 papers are 0.61, 0.70, 0.77, 0.87, 0.88, 0.97, 1.00, 1.00, 1.00 | **three of the seven do not shrink the tabular at all**, and the floor among those that do is 0.61. `\scriptsize` (7 pt against a 9 pt caption, ratio 0.78) sits mid-range, so it is safe |
 | Stub-head alignment in two-row headers | top-row 3 : bottom-row 2; three-row headers centred | booktabs' manual uses bottom alignment; bottom needs no `\multirow` |
 
 Vertical cost in a short table: booktabs `\aboverulesep`/`\belowrulesep` are
@@ -90,6 +90,19 @@ than any `\arraystretch` change.
 | First-citation order inversions | 0 in 5 papers, 1 in 2 papers (including the venue's own showcase paper) | one inversion caused by a float is venue-normal |
 | `Figs.` (plural abbreviation) | 0 occurrences in 7 papers | one figure's panels are `Fig. 3(a, b)` |
 
+## Reference venue names
+
+| quantity | accepted papers |
+|---|---|
+| Lines carrying an abbreviated venue (`Proc.`, `Trans.`, `Conf.`, `Int.`) | 0 / 0 / 0 / 0 / 0 / 2 / 2 |
+| Lines carrying a full venue name (`Proceedings of`, `Transactions on`, `International Conference`) | 0 / 7 / 10 / 10 / 11 / 21 / 21 |
+
+Six of the seven print venue names in full. IEEE editorial style prescribes the
+abbreviated forms, so abbreviating is *more* compliant than what the corpus
+does, not less — but it will not look like the neighbouring papers. It is also
+the single largest reference-page lever measured here (see `compression.md`),
+which is why it is worth knowing that both forms get accepted.
+
 ## Prose texture (per 1000 body words, references stripped)
 
 | mark | accepted papers | notes |
@@ -101,6 +114,18 @@ than any `\arraystretch` change.
 Measure the two ledgers separately: a paper with an eight-panel figure and four
 symbol-keyed tables can sit at 50/1000 in captions while its body prose is at
 3/1000 — the second number is the one that matters.
+
+## Italics
+
+| quantity | accepted papers | consequence |
+|---|---|---|
+| Italic runs in the body (pages 1–4, title block and Index Terms excluded) | 0 / 1 / 8 / 11 / 14 / 27 / 29 | there is **no venue norm**: the corpus spans "none at all" to one every other paragraph. Italics density is therefore never evidence for a change — do not propose adding or removing emphasis on the grounds that the venue does or does not use it |
+
+What the corpus is consistent about is the *use*, not the count: an example
+string quoted from data (a caption, a label, a class name) appears in quotation
+marks, and italics carry defined terms and method names. A paper that
+italicises quoted example strings is the odd one out — but it is still the
+author's markup, so it is a proposal like any other text change.
 
 ## Conclusions
 

@@ -106,13 +106,19 @@ Work in this order; it is roughly benefit ÷ risk:
    float's declaration to just after its first `\ref`, then re-measure all
    column bottoms. One figure with several panels is `Fig. 3(a, b)`, never
    `Figs. 3(a, b)` -- accepted papers contain zero `Figs.`.
-3. **In-figure typography.** Pairwise overlap checks miss three things: text
+3. **Merging and cropping figures.** Two levers that cut no content: several
+   small figures declared as one multi-panel figure (each float removed takes
+   its caption block and one `\floatsep` with it -- but the merged caption is
+   usually longer, so measure the net), and cropping the whitespace inside a
+   figure's own bounding box. Both re-arrange the author's figures, so propose
+   them; apply only after the author agrees.
+4. **In-figure typography.** Pairwise overlap checks miss three things: text
    escaping its own panel (do a containment check), a legend entry that reads
    as a formula but does not match the method (check it against the code --
    legends describe the toy drawing, readers cite them as definitions), and
    abbreviation periods that differ between panels. After any figure rebuild,
    confirm the PDF bounding box is unchanged so the page does not reflow.
-4. **Captions.** A caption is the author's text, so the same rule holds: set
+5. **Captions.** A caption is the author's text, so the same rule holds: set
    it differently, do not rewrite it. Run an n-gram comparison against the body
    and *report* any sentence that appears in both, recommending it be dropped
    from the caption rather than the body -- then let the author drop it. Fix
@@ -121,7 +127,7 @@ Work in this order; it is roughly benefit ÷ risk:
    caption should carry the same scope qualifier the prose uses ("among
    backbones of comparable scale", "≤ N M parameters"), because reviewers check
    superlatives against the table, not against the paragraph that scoped them.
-5. Run `verify_all.sh`, report using the template below, and **stop for the
+6. Run `verify_all.sh`, report using the template below, and **stop for the
    author's confirmation**. Say how many mm Phase A saved and how many words
    Phase B will need.
 
@@ -150,7 +156,13 @@ and keep it only if it actually bought lines.
    preamble, lets TeX fill the line and can absorb the runt with no rewriting.
 4. **Float placement.** Moving a float's declaration changes where text flows
    around it and can remove a runt several paragraphs away. Re-measure every
-   column bottom afterwards.
+   column bottom afterwards. The stock float *parameters* (`topnumber` 2,
+   `topfraction` .7, `textfraction` .2) also cap how much of a column floats
+   may take, and raising them stops figures drifting past their references on
+   a float-heavy draft -- but re-measure at the end: on one paper they were
+   necessary at 8 pages and, once the paper reached 5, reverting them changed
+   nothing. Say so in the report rather than carrying an override you can no
+   longer justify.
 5. **Section-heading skips.** `spconf.sty` sets only the heading *face*, so the
    skips are `article`'s, sized for a 10 pt one-column class. Tightening them
    with `\@startsection` reclaims ~13 pt of white per heading -- 64 mm over
@@ -162,21 +174,28 @@ and keep it only if it actually bought lines.
    page, and `measure_layout.py` flags a paper that goes under the corpus floor
    (10.5 pt above / 4.3 pt below). Recipe and the measured table:
    `references/compression.md`.
-6. **Fill the last page.** Measure the corpus's last-column gap first (accepted
+6. **Reference venue names.** Abbreviating them to IEEE style
+   (`Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern
+   Recognition` -> `Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit.`) is
+   the largest reference-page lever measured here: expanding 24 venue strings
+   on a 26-entry bibliography added 18 lines and a page. It touches no author
+   prose. Note for the author that IEEE style prescribes the short forms while
+   6 of 7 accepted papers print them in full -- both get accepted.
+7. **Fill the last page.** Measure the corpus's last-column gap first (accepted
    ICASSP 2026 papers: 0.1–9.0 mm). The lever is the bibliography `\itemsep`,
    tuned by bisection with a full rebuild each step. Do not expand `et al.`
    author lists to fill space -- IEEE style requires et al. past six authors, so
    expanding is a violation, not a trick.
-7. **What you may not do here:** delete a sentence, delete "redundant" words,
+8. **What you may not do here:** delete a sentence, delete "redundant" words,
    merge two paragraphs, shorten a caption's prose, or reword for density.
    Those are text edits. If `find_runts.py` still reports runts, or the gap is
    still open, put them in the report as *proposals* -- quote the paragraph,
    name the two or three words you would cut, say how many lines it buys -- and
    stop. The author decides.
-8. **Fact-check what the layout moved**, using `references/fact-check.md`. A
+9. **Fact-check what the layout moved**, using `references/fact-check.md`. A
    factual error you find is also reported, not silently rewritten: quote the
    sentence, give the evidence, propose the wording, let the author approve it.
-9. `verify_all.sh --backup <phase-A pdf>`. Since no word changed,
+10. `verify_all.sh --backup <phase-A pdf>`. Since no word changed,
    `diff_numbers.py` must report **zero** lost and zero gained numbers. Any
    difference means you edited text without meaning to.
 
