@@ -3,8 +3,9 @@
 **English** · [简体中文](README.zh-CN.md)
 
 An agent skill for condensing, typesetting and fact-checking a LaTeX paper to
-**ICASSP's 4 + 1 page limit** (spconf template) — without deleting figure or
-table content, and with every edit verified by measurement rather than by eye.
+**ICASSP's 4 + 1 page limit** (spconf template) — by changing typesetting only,
+never deleting or rewording your text, figures or tables, and with every edit
+verified by measurement rather than by eye.
 
 Works with **Claude Code** and **OpenAI Codex** (both read the same
 `SKILL.md` format). The measured venue facts come from seven accepted
@@ -19,14 +20,41 @@ real submission, including the mistakes.
 2. **Phase A** — figures, tables and captions only: table font/rule spacing,
    float grouping and numbering order, in-figure typography, caption
    de-duplication and scope qualifiers. Stops for the author's confirmation.
-3. **Phase B** — body text: repetition first, then short last lines,
-   punctuation density, filling the last page, and a fact-check of every
-   sentence touched.
+3. **Phase B** — body text, *typesetting only*: microtype, `\looseness`,
+   hyphenation and float placement to buy lines without changing a word; then
+   filling the last page, and a fact-check. Anything that would need words cut
+   is written up as a proposal for you, not applied.
 4. After every edit: rebuild, and a seven-gate check that must pass.
 
-Three red lines: never cut figure/table content; never over-correct (a claim
-made weaker but not more accurate is left alone); never edit twice without a
-rebuild.
+Three red lines:
+
+- **Your words are never edited.** Not a paragraph, not a sentence, not "two
+  redundant words" — for text the skill may change only *how the same words are
+  set*, using microtype, `\looseness`, hyphenation and float placement. On one
+  5-page paper, loading microtype alone was worth 32 lines (about a full page)
+  without touching a single word. When layout runs out, the skill reports the
+  paragraphs and the words it *would* cut, and stops; you decide.
+- **Figure and table content is never cut**: no dropping metric columns, no
+  removing panels.
+- **No over-correction**: a claim made weaker but not more accurate is left
+  alone; a factual problem is reported with evidence and a proposed wording,
+  not silently rewritten.
+
+## Back up before you start
+
+Everything the skill does is reversible only if there is something to revert to,
+and page-limited typesetting is exactly the kind of work where the third attempt
+is worse than the first. Snapshot the whole source, not just the PDF:
+
+```bash
+git add -A && git commit -m "pre-condensation snapshot"
+# not using git? then:
+cp -r my-paper my-paper.backup-$(date +%Y%m%d_%H%M%S)
+```
+
+Phase 0 of the workflow does this first and refuses to continue without it.
+Keep a dated PDF of each stage in `backup/` as well, so `diff_numbers.py`
+always has a previous build to compare against.
 
 ## Install
 

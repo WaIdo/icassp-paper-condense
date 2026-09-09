@@ -1,6 +1,6 @@
 ---
 name: icassp-paper-condense
-description: Condense, typeset and fact-check a LaTeX paper to ICASSP's 4-page-plus-references limit (spconf.sty) without deleting any figure or table content, then verify every edit by measurement. Use this whenever a user wants to shrink, compress, tighten, squeeze, fit, or polish a paper for ICASSP or another IEEE signal-processing venue on the spconf template, mentions a page overflow, an over-long fifth page, a last page that is half empty, one-word last lines, a table that is too wide or too tall, an abstract over 80 mm, adding an author or affiliation without breaking the page count, or asks to check that the paper's numbers, citations and claims still hold after editing -- even if they never say "ICASSP" but the paper is a 4+1-page two-column IEEE conference submission.
+description: Condense, typeset and fact-check a LaTeX paper to ICASSP's 4-page-plus-references limit (spconf.sty) by changing typesetting only -- never deleting or rewording the author's text, figures or tables -- and verify every edit by measurement. Use this whenever a user wants to shrink, compress, tighten, squeeze, fit, or polish a paper for ICASSP or another IEEE signal-processing venue on the spconf template, mentions a page overflow, an over-long fifth page, a last page that is half empty, one-word last lines, a table that is too wide or too tall, an abstract over 80 mm, adding an author or affiliation without breaking the page count, or asks to check that the paper's numbers, citations and claims still hold after editing -- even if they never say "ICASSP" but the paper is a 4+1-page two-column IEEE conference submission.
 ---
 
 # ICASSP paper condensation
@@ -26,9 +26,15 @@ facts about this task:
 
 ## Red lines (stop and ask the author before crossing)
 
+- **Never delete or reword the author's text.** Not a paragraph, not a
+  sentence, not "two redundant words". For body text you may change only the
+  *typesetting* -- how the same words are set on the page. The words are the
+  author's argument, and an agent cannot tell a redundant clause from a load-
+  bearing one by reading it once. When layout cannot close the gap, list the
+  paragraphs and your suggested rewrites in the report and let the author cut.
 - **Never cut figure or table content**: no dropping metric columns, no
   removing panels, no shrinking a figure until labels are unreadable. Space
-  comes from layout and prose. If those run out, present the gap in mm and the
+  comes from layout only. If layout runs out, present the gap in mm and the
   options with their costs; the author chooses.
 - **Never over-correct.** Before changing any statement, answer: which *quantity*
   is the sentence wrong about, is your evidence a *unique* reading, does it
@@ -62,7 +68,16 @@ compute with it.
 
 ### Phase 0 — baseline (measure only, change nothing)
 
-1. Back up: `cp main.pdf backup/$(date +%Y%m%d_%H%M%S)_$(git rev-parse --short HEAD).pdf`.
+1. **Back up the whole source, not just the PDF, before touching anything.**
+   Everything after this point is reversible only if there is something to
+   revert to:
+   ```bash
+   git add -A && git commit -m "pre-condensation snapshot"   # if the paper is in git
+   # or, if it is not:
+   cp -r <paper-dir> <paper-dir>.backup-$(date +%Y%m%d_%H%M%S)
+   ```
+   Then keep a dated PDF of each accepted stage in `backup/`, so
+   `diff_numbers.py` always has a previous build to compare against.
 2. `measure_layout.py main.pdf` and `find_runts.py`. Note the overflow in mm
    and convert to lines (9 pt spconf: 1 line ≈ 3.67 mm, ≈10 words per full line).
 3. If accepted papers from the venue are available, `corpus_baseline.py` them.
@@ -97,44 +112,62 @@ Work in this order; it is roughly benefit ÷ risk:
    legends describe the toy drawing, readers cite them as definitions), and
    abbreviation periods that differ between panels. After any figure rebuild,
    confirm the PDF bounding box is unchanged so the page does not reflow.
-4. **Captions.** Run an n-gram comparison against the body; a sentence that
-   appears in both is deleted from the caption, not the body. Fix ≤2-word last
-   lines with the accounting rule below. Every comparison table's caption must
-   carry the same scope qualifier the prose uses ("among backbones of
-   comparable scale", "≤ N M parameters") -- reviewers check superlatives
-   against the table, not against the paragraph that scoped them.
+4. **Captions.** A caption is the author's text, so the same rule holds: set
+   it differently, do not rewrite it. Run an n-gram comparison against the body
+   and *report* any sentence that appears in both, recommending it be dropped
+   from the caption rather than the body -- then let the author drop it. Fix
+   ≤2-word last lines by hyphenation or `\looseness`, not by cutting words.
+   The one caption change worth proposing every time: every comparison table's
+   caption should carry the same scope qualifier the prose uses ("among
+   backbones of comparable scale", "≤ N M parameters"), because reviewers check
+   superlatives against the table, not against the paragraph that scoped them.
 5. Run `verify_all.sh`, report using the template below, and **stop for the
    author's confirmation**. Say how many mm Phase A saved and how many words
    Phase B will need.
 
-### Phase B — body text (only after the author confirms Phase A)
+### Phase B — body text, typesetting only (after the author confirms Phase A)
 
-1. **Delete repetition before deleting information.** Three kinds cost nothing:
-   the experiments section restating the method section verbatim; a sentence
-   that a caption already says; and "colon + restating clause" endings
-   (`..., which shows X: averaging is not generically beneficial.`) -- those are
-   simultaneously a runt source, a repetition and a punctuation-density
-   contributor.
-2. **Short last lines.** With W words on the last line and ~N words per full
-   line, cutting k words leaves ≈ N + W − k. Cut 2–3 words; cutting 5+ makes a
-   new half-empty tail. `find_runts.py` reports W and fill %.
-3. **Punctuation and "AI feel".** Measure semicolon/colon density per 1000 words
-   against the corpus *before* editing, and keep two ledgers: body prose
-   (`independent clause; independent clause` is the tell -- split into
-   sentences) versus caption keys (`ℓ: labels; †: external model;`) which are a
-   normal compression device and stay.
-4. **Fill the last page.** Measure the corpus's last-column gap first (accepted
-   ICASSP 2026 papers: 0.1–9.0 mm). The main lever is the bibliography
-   `\itemsep`, tuned by bisection with a full rebuild each step. Do not expand
-   `et al.` author lists to fill space -- IEEE style requires et al. past six
-   authors, so expanding is a violation, not a trick. A concrete, paper-specific
-   future-work sentence in the conclusion is venue-normal (3 of 6 corpus
-   conclusions) and fills the last line honestly.
-5. **Fact-check what you touched**, using `references/fact-check.md`. Numbers
-   rarely break; sentences with "prevents / ensures / all / both / no existing"
-   do.
-6. `verify_all.sh --backup <phase-A pdf>`; every number in the diff must be
-   explainable.
+The words do not change in this phase. What changes is how TeX sets them.
+These levers are ordered by measured yield; run `verify_all.sh` after each one
+and keep it only if it actually bought lines.
+
+1. **microtype.** The single largest lever, and it touches no word. On one
+   5-page paper: no microtype = 1034 text lines and 6 pages; `protrusion=false`
+   = 1002 lines and 5 pages; `protrusion=true, expansion=true` = 1000 lines.
+   Loading it at all was worth 32 lines, about a full page.
+   ```latex
+   \usepackage[protrusion=true,expansion=true,stretch=20,shrink=20]{microtype}
+   ```
+   Protrusion pushes punctuation slightly into the margin; if that bothers the
+   venue or the author, `protrusion=false` still keeps most of the gain.
+2. **`\looseness=-1` at the start of a paragraph** asks TeX for one line fewer
+   without changing a word. It works only where the paragraph has interword
+   slack: on two already-tight paragraphs it re-broke the lines but saved
+   nothing. So try it, measure, and revert it when it does not pay -- a
+   `\looseness` that saves no line only makes the spacing worse.
+3. **Hyphenation.** A short last line is often a long unbreakable word on the
+   line above. `\-` inside that word, or a `\hyphenation{...}` entry in the
+   preamble, lets TeX fill the line and can absorb the runt with no rewriting.
+4. **Float placement.** Moving a float's declaration changes where text flows
+   around it and can remove a runt several paragraphs away. Re-measure every
+   column bottom afterwards.
+5. **Fill the last page.** Measure the corpus's last-column gap first (accepted
+   ICASSP 2026 papers: 0.1–9.0 mm). The lever is the bibliography `\itemsep`,
+   tuned by bisection with a full rebuild each step. Do not expand `et al.`
+   author lists to fill space -- IEEE style requires et al. past six authors, so
+   expanding is a violation, not a trick.
+6. **What you may not do here:** delete a sentence, delete "redundant" words,
+   merge two paragraphs, shorten a caption's prose, or reword for density.
+   Those are text edits. If `find_runts.py` still reports runts, or the gap is
+   still open, put them in the report as *proposals* -- quote the paragraph,
+   name the two or three words you would cut, say how many lines it buys -- and
+   stop. The author decides.
+7. **Fact-check what the layout moved**, using `references/fact-check.md`. A
+   factual error you find is also reported, not silently rewritten: quote the
+   sentence, give the evidence, propose the wording, let the author approve it.
+8. `verify_all.sh --backup <phase-A pdf>`. Since no word changed,
+   `diff_numbers.py` must report **zero** lost and zero gained numbers. Any
+   difference means you edited text without meaning to.
 
 ### After every edit
 
@@ -159,6 +192,9 @@ bottoms / runts / citations / numbers-vs-backup
 
 ## Remaining gap
 X mm ≈ Y lines; Phase B needs ≈ Z words
+
+## Text changes I am proposing (not applied)
+(quote the paragraph, the words to cut, and the lines it buys -- the author applies them)
 
 ## For the author to decide
 (each: current state, options, cost of each -- do not decide for them)

@@ -1,21 +1,28 @@
 # Compression playbook: levers, measured yields, and the accounting behind them
 
+**The author's text is not a lever.** Nothing in this file authorises deleting
+or rewording a sentence, a clause or a "redundant" word of the paper. Body text
+and caption prose may only be re-*set*, never re-*written*. Where a section
+below would once have cut words, it now tells you what to measure and what to
+propose to the author instead.
+
 ## The gap ledger (do this before touching anything)
 
 1. **Measure the overflow** in mm from `measure_layout.py` (content beyond the
    last allowed body page, or the last column's shortfall if you are filling).
    Convert: 1 line ≈ 3.67 mm at 9 pt spconf.
-2. **Measure the stock**: words in the sections you are allowed to condense ÷
-   ~10 words per full line = lines of prose.
-3. **Ratio = overflow lines ÷ stock lines.** Prose condensation of already-
-   edited text yields 12 – 16 % per pass; dense setup paragraphs give ~5 %,
-   discussion and conclusion 15 – 20 %. Above ~20 % you will start deleting
-   argument. Tell the author *now*, with the layout levers below and their
-   measured yields, and let them choose.
-4. Every number you consider deleting: is it *derivable* from numbers already
-   on the page (then it can go) or an *independent fact* or a *link in a causal
-   chain* (then it stays)? A "6.7× more steps" deleted once severed "more
-   tracklets → more optimizer steps → higher dispersion" and had to come back.
+2. **Add up what layout can still give.** Go down the lever table below, note
+   which levers this paper has not used yet, and sum their measured yields.
+   That is your budget; you have no other.
+3. **Compare.** If layout covers the overflow, say so and proceed. If it does
+   not, report the shortfall in lines *now* — before editing anything — and
+   list the paragraphs whose text the author could cut, with the lines each
+   would buy. Cutting is their decision, not yours.
+4. If the author does decide to cut, help them judge each number: is it
+   *derivable* from numbers already on the page, or an *independent fact* or a
+   *link in a causal chain*? A "6.7× more steps" deleted once severed "more
+   tracklets → more optimizer steps → higher dispersion" and had to be put
+   back.
 
 ## Layout levers, in order of yield ÷ risk (measured on an 8 → 5 page job)
 
@@ -29,11 +36,13 @@
 | Display-equation skips (`\abovedisplayskip` etc. 4/4/2/2 pt) | stock→4 pt saves 4.4 mm over five equations; 4→3 pt 3.2 mm; 3→2 pt 7.4 mm; →0 pt 14.8 mm | at 4 pt the white between text ink and equation ink is 1.42 pt against 1.24 – 1.95 pt in accepted papers — **already level; do not go tighter** |
 | `\parskip 0pt plus 1.5pt` | absorbs `\flushbottom` stretch quietly | — |
 | Group several floats into one column (declare at one insertion point) | frees the column they used to split | re-measure every column bottom after moving a float |
-| Prose condensation | 12 – 16 % per pass | see Phase B rules |
+| **microtype** | on one 5-page paper: none = 1034 lines / 6 pages, `protrusion=false` = 1002 / 5, `protrusion+expansion` = 1000 / 5 — loading it at all was worth **32 lines** | protrusion nudges punctuation into the margin; drop to `protrusion=false` if that is unwelcome and keep most of the gain |
+| `\looseness=-1` on one paragraph | 0 or 1 line | only works where the paragraph has interword slack; on two already-tight paragraphs it re-broke the lines and saved nothing. Measure, and revert when it pays nothing |
+| `\-` or `\hyphenation{}` on a long unbreakable word | often exactly the runt | the cheapest runt fix that changes no word |
 
 Do **not**: change `\textwidth`/margins, drop below 9 pt in captions or body,
-trim `\vskip 2em` above the title (every accepted paper keeps it), or delete
-figure/table content.
+trim `\vskip 2em` above the title (every accepted paper keeps it), delete
+figure/table content, or delete or reword any of the author's text.
 
 ## `\flushbottom` and why freed lines have to have a destination
 
@@ -51,26 +60,34 @@ by pulling the next section up onto that page. Two consequences:
 ## Short last lines ("runts")
 
 `find_runts.py` lists every paragraph and caption whose last line holds ≤2
-words. With W words on that line and ~N per full line, removing k words leaves
-a new last line of ≈ N + W − k words:
+words. Fix them with typesetting first, in this order:
 
-- k = 2–3 → 8–9 words (80–90 % full): optimal
-- k ≥ 5 → ≤6 words: you made a new half-empty tail
-- k < 1 → the runt survives
+1. **`\-` or a `\hyphenation{}` entry** for the long word sitting at the end of
+   the previous line — a runt is often just a word TeX could not break.
+2. **`\looseness=-1`** at the start of that paragraph. Measure; revert if it
+   buys nothing.
+3. **microtype**, if the paper is not already using it — it re-breaks every
+   paragraph in the document and clears runts wholesale.
 
-Preferred sources of the 2–3 words, because they cost no information:
+If none of that works, the runt stays and goes in the report as a proposal.
+State it in the form the author can act on: with W words on the last line and
+~N per full line, removing k words leaves ≈ N + W − k, so **suggest cutting
+2–3 words** (5 or more just makes a new half-empty tail), and name the
+candidates you would cut and why they cost no information:
+
 1. a "colon + restating clause" (`…below theirs: averaging is not generically
-   beneficial.`) — it repeats the numbers beside it, adds a colon, and is
-   usually exactly a 3-word tail;
-2. a doubled verb or phrase inside one sentence (`is correct at … , is correct
+   beneficial.`) — it repeats the numbers beside it;
+2. a doubled verb or phrase inside one sentence (`is correct at …, is correct
    at every rank …`);
-3. a standalone one-sentence paragraph that repeats the previous sentence —
-   fold it into that paragraph.
+3. a standalone one-sentence paragraph that repeats the previous sentence.
+
+Quote the paragraph, mark the words, give the line count. Then stop.
 
 ## Captions
 
-- n-gram (5-gram) overlap with the body: a shared sentence is deleted from the
-  caption, never from the body.
+- n-gram (5-gram) overlap with the body: report the duplicated sentence and
+  recommend dropping it from the *caption* rather than the body — but the
+  caption is the author's text too, so propose it, do not cut it yourself.
 - Key-style legends (`ℓ: manual labels; †: external model; ‡: as reported in
   [n]`) are a compression device, not an AI tell — keep them.
 - Every comparison table repeats the scope qualifier its superlatives depend
@@ -104,10 +121,15 @@ Preferred sources of the 2–3 words, because they cost no information:
 
 Measure first (`corpus_baseline.py` prints densities). Then:
 
-- `independent clause; independent clause` in body prose → two sentences.
-- A colon must be explained by the *whole* clause before it, not by its last
-  noun; otherwise rewrite as two statements.
-- Keep caption keys' semicolons. Keep colons that introduce displays.
+Punctuation lives inside sentences, so every item here is a **proposal**, not
+an edit you make:
+
+- `independent clause; independent clause` in body prose reads as the "AI feel"
+  tell; suggest splitting into two sentences.
+- A colon should be explained by the *whole* clause before it, not by its last
+  noun.
+- Caption keys' semicolons and colons introducing displays are correct — leave
+  them out of the report.
 - Abbreviation periods (`Fig.`, `No align.`) are consistent or absent — never
   both forms of the same word in one figure.
 
