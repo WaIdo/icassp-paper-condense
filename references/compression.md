@@ -42,6 +42,7 @@ propose to the author instead.
 | **IEEE venue abbreviation in the `.bib`** (`Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition` → `Proc. IEEE/CVF Conf. Comput. Vis. Pattern Recognit.`) | measured: expanding 24 venue strings on one 26-entry bibliography added **18 lines** and one page | touches no author prose — venue names are bibliographic style. IEEE style prescribes the short forms, but 6 of 7 accepted papers print them in full, so the reference list will not look like its neighbours |
 | Float placement parameters (`topnumber` 3, `totalnumber` 4, `topfraction` .92, `textfraction` .08, `floatpagefraction` .75) | on an 8-page draft with six floats in four columns, it stopped the experiment figures drifting one to two pages past their references; on the finished 5-page paper, reverting them changed **nothing** — same page count, same float pages | a lever that paid once can pay nothing later. Re-measure it at the end and say so, rather than carrying an override you can no longer justify |
 | Merge several small figures into one multi-panel figure | removes one caption block (`\vskip` + its lines) and one `\floatsep` per float removed | this is figure *content* being re-arranged, not cut — every panel survives. Propose it to the author; a merged figure's caption is usually longer than any one it replaced, so measure the net |
+| Scale a figure below full column width (`width=0.85\columnwidth`) | measured on one paper: **zero** — same page count, same text-line count — while the smallest in-figure text fell 5.9 → 5.2 pt | height shrinks with width, so this only pays when the figure is the thing overflowing a column. Measure before and after; it is the easiest lever to apply and believe without checking |
 | Crop the whitespace inside a figure's own bounding box | the whole margin the figure was reserving | must be done in the figure source or with a bbox crop, never with `\includegraphics[trim=…]` guesswork; re-measure the PDF bbox afterwards |
 
 Do **not**: change `\textwidth`/margins, drop below 9 pt in captions or body,
@@ -181,6 +182,14 @@ Quote the paragraph, mark the words, give the line count. Then stop.
 5. **Not** a lever: expanding `and others` author lists (IEEE requires et al.
    past six authors), adding uncited references, or letting one body line
    spill onto page 5.
+6. **Removing references is not yours to do either.** Measured on a 26-entry
+   list, an entry costs ≈4.4 lines, which makes dropping four of them look like
+   the cheapest page on the table. It is not a layout lever: a citation is the
+   author's scholarly record, and which related work can go is their call and
+   sometimes a reviewer's objection. Report the entries that are cited once in
+   a sentence that would survive without them, with the line count, and stop.
+   The venue baseline for the decision is 16 – 35 entries (see
+   `measurements.md`).
 
 ## Punctuation and emphasis
 

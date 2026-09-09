@@ -31,7 +31,7 @@ considered the final word."
 | Line density | "no more than 3.2 lines/cm" | spconf's `\ninept` gives 10.4 pt leading ≈ 2.7 lines/cm |
 | Title block | title bold caps, authors, affiliation | see `measurements.md` — every accepted paper starts the title at 33.1 – 34.1 mm; the block runs 4 – 9 lines |
 | Table bodies | (the 9 pt rule names captions, not table bodies) | accepted papers set table bodies at 5.4 – 6.9 pt while captions stay at 9 pt; `\scriptsize` (7 pt) is conservative |
-| In-figure text | not specified | axis labels and panel annotations at 6 – 7 pt are universal in the corpus |
+| In-figure text | not specified | **much smaller than expected**: measured word-bearing spans inside figures reach 3.2 pt (`Raw image`), 3.5 pt (a whole quoted phrase), 3.9 – 5.0 pt (`L2-Norm`, `Proj`, `CLIP`) in accepted papers; only 2 of 7 keep everything at 6 pt or above. There is no numeric floor to respect here, only legibility — so a figure whose annotations sit at 6 pt has room the corpus says is usable, and shrinking is a judgement, not a rule violation |
 | Footnotes | not specified | 3 of 7 accepted papers have 8 pt first-page footnotes; that is spconf's own `\footnotesize` via `\thanks` |
 
 ## What `spconf.sty` actually does (facts that decide several tactics)

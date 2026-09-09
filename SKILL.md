@@ -106,12 +106,16 @@ Work in this order; it is roughly benefit ÷ risk:
    float's declaration to just after its first `\ref`, then re-measure all
    column bottoms. One figure with several panels is `Fig. 3(a, b)`, never
    `Figs. 3(a, b)` -- accepted papers contain zero `Figs.`.
-3. **Merging and cropping figures.** Two levers that cut no content: several
-   small figures declared as one multi-panel figure (each float removed takes
-   its caption block and one `\floatsep` with it -- but the merged caption is
-   usually longer, so measure the net), and cropping the whitespace inside a
-   figure's own bounding box. Both re-arrange the author's figures, so propose
-   them; apply only after the author agrees.
+3. **Merging, cropping and scaling figures.** Three levers that cut no
+   content: several small figures declared as one multi-panel figure (each
+   float removed takes its caption block and one `\floatsep` with it -- but the
+   merged caption is usually longer, so measure the net); cropping the
+   whitespace inside a figure's own bounding box; and scaling a figure below
+   full column width. Scaling is the one to distrust: measured on one paper,
+   `width=0.85\columnwidth` changed neither the page count nor the text-line
+   count while dropping the smallest in-figure text from 5.9 to 5.2 pt. Merging
+   and cropping re-arrange the author's figures, so propose them; apply only
+   after the author agrees.
 4. **In-figure typography.** Pairwise overlap checks miss three things: text
    escaping its own panel (do a containment check), a legend entry that reads
    as a formula but does not match the method (check it against the code --
@@ -187,7 +191,10 @@ and keep it only if it actually bought lines.
    author lists to fill space -- IEEE style requires et al. past six authors, so
    expanding is a violation, not a trick.
 8. **What you may not do here:** delete a sentence, delete "redundant" words,
-   merge two paragraphs, shorten a caption's prose, or reword for density.
+   merge two paragraphs, shorten a caption's prose, reword for density, or drop
+   a reference. An entry costs ≈4.4 lines, so four of them look like the
+   cheapest page available -- but a citation is the author's scholarly record,
+   not white space.
    Those are text edits. If `find_runts.py` still reports runts, or the gap is
    still open, put them in the report as *proposals* -- quote the paragraph,
    name the two or three words you would cut, say how many lines it buys -- and
