@@ -179,9 +179,12 @@ Quote the paragraph, mark the words, give the line count. Then stop.
    26-entry bibliography — because 6 of 7 accepted papers print them in full.
    Unlike the two below, it changes bibliographic style, not the author's text
    and not the facts of a reference.
-5. **Not** a lever: expanding `and others` author lists (IEEE requires et al.
-   past six authors), adding uncited references, or letting one body line
-   spill onto page 5.
+5. **Not** a lever: expanding `and others` author lists, adding uncited
+   references, or letting one body line spill onto page 5. On the author lists:
+   six of seven accepted papers do print eight or nine authors in full, so this
+   is not a rule violation — it is that the `.bib` cannot prove the true author
+   count, and flipping some entries and not others makes the bibliography
+   inconsistent for a line or two.
 6. **Removing references is not yours to do either.** Measured on a 26-entry
    list, an entry costs ≈4.4 lines, which makes dropping four of them look like
    the cheapest page on the table. It is not a layout lever: a citation is the

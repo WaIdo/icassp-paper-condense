@@ -67,10 +67,20 @@ considered the final word."
 
 The kit ships `IEEEbib.bst`. Two behaviours matter:
 
-- `and others` in the `.bib` renders as " et al." IEEE's rule: list up to six
-  authors in full; beyond six, first author + et al. Both directions are rules —
-  a five-author entry printed as et al. is as wrong as a nine-author entry
-  printed in full.
+- `and others` in the `.bib` renders as " et~al." **`IEEEbib.bst` never
+  truncates on its own**: the et al. appears only where the `.bib` literally
+  says `and others`, so the author count is an editorial choice you make in the
+  `.bib`, not something the style file enforces.
+  IEEE's *editorial* style (the house rule applied to the published version)
+  lists up to six authors in full and uses first author + et al. beyond. The
+  ICASSP kit does **not** state that rule — its own `ieee_cite.pdf` shows
+  examples only up to three authors, all listed in full.
+  Measured on the seven accepted papers, submission-time practice is far looser:
+  six of the seven print **eight or nine** authors in full, and their et al.
+  counts are 0 / 0 / 1 / 1 / 3 / 4 / 35 — the last paper uses et al. on every
+  one of its 35 entries. Both extremes get accepted. So treat the six-author
+  line as house style for the camera-ready, not as a submission rule, and pick
+  one convention and apply it to every entry.
 - Numbering is by order of first `\citation` in the `.aux`, which is the order
   LaTeX *executes* `\cite`. A `\cite` inside a float executes when the float is
   declared, not where it is placed, so printed first-appearance order can be

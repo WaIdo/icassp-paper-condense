@@ -91,8 +91,14 @@ tables up.
 **The same citation on two rows is fine** when they are two variants from one
 paper ("X" and "X + re-rank"); it is not a duplicate.
 
-**Expanding et al. to fill a page is a format violation**, not a trick: IEEE
-lists up to six authors, first author + et al. beyond.
+**Expanding `and others` to full author lists is not a page-filling trick** —
+but not because it is a violation. Measured on seven accepted papers, six of
+them print eight or nine authors in full, so long author lists pass review
+routinely. The reason to leave them alone is different: the `.bib` cannot prove
+how many authors an entry really has (`check_citations.py` says so), so
+"expanding" often invents names, and flipping some entries and not others
+leaves the bibliography internally inconsistent. Pick one convention, apply it
+everywhere, and buy your lines somewhere else.
 
 ## Process
 
